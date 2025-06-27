@@ -30,9 +30,10 @@ public class Prenotazione {
     private Utente utente;
 
     public String toString(){
-        return "Prenotazione [id=" + id + " dataPrenotazione=" + dataPrenotazione +
-                          " durata=" + durata +  " approvata=" + approvata +
-                            " laboratorio= " + aula + " studente= " + utente.getId() +  "]";
+        return "Prenotazione [id=" + id + ", dataPrenotazione=" + dataPrenotazione +
+                ", durata=" + durata + ", approvata=" + approvata +
+                ", aulaId=" + (aula != null ? aula.getId() : "null") +
+                ", utenteId=" + (utente != null ? utente.getId() : "null") + "]";
     }
 
 }

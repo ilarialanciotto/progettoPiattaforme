@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class PrenotazioneService {
     public void accettaPrenotazione(Prenotazione prenotazione) {
         prenotazione.setApprovata(true);
         prenotazioneRepository.accetta(prenotazione.getId(),prenotazione.isApprovata());
-        prenotazione.setCodice(new Random().nextInt(200)+1);
+        prenotazione.setCodice(new SecureRandom().nextInt(900000) + 100000); // da 100000 a 999999
         prenotazioneRepository.update(prenotazione.getCodice(),prenotazione.getId());
     }
 

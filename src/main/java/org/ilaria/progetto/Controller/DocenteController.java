@@ -24,10 +24,10 @@ public class DocenteController {
     private final PrenotazioneService prenotazioneService;
     private final UtenteRepository utenteRepository;
 
+
     /* un docente ha la lista delle prenotazioni dei laboratori di cui è responsabile e che non
      ha ancora approvato, prima viene fatto un controllo per eliminare le prenotazioni scadute*/
 
-    @PreAuthorize("hasRole('DOCENTE')")
     @GetMapping("/getLista")
     public ResponseEntity<List<PrenotazioneDTO>> ListaPrenotazioni() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
