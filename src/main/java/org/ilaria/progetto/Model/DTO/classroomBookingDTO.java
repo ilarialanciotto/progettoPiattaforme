@@ -8,10 +8,10 @@ import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
-public class PrenotazioneAuleDTO {
+public class classroomBookingDTO {
 
     private long id;
-    private LocalDate dataPrenotazione;
-    private LocalTime oraPrenotazione;
-    private LocalTime durata;
+    private LocalDate bookingDate;
+    private LocalTime bookingTime;
+    private LocalTime duration;
 }

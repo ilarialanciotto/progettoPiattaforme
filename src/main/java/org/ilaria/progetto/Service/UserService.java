@@ -1,13 +1,12 @@
 package org.ilaria.progetto.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.ilaria.progetto.Model.DTO.AulaDTO;
+import org.ilaria.progetto.Model.Entity.User;
+import org.ilaria.progetto.Role;
 import org.ilaria.progetto.Security.JwtResponse;
-import org.ilaria.progetto.Model.DTO.UtenteDTO;
-import org.ilaria.progetto.Model.Entity.Utente;
-import org.ilaria.progetto.Repository.UtenteRepository;
-import org.ilaria.progetto.Ruolo;
-import org.ilaria.progetto.Service.Mapper.UtenteMapper;
+import org.ilaria.progetto.Model.DTO.UserDTO;
+import org.ilaria.progetto.Repository.UserRepository;
+import org.ilaria.progetto.Service.Mapper.UserMapper;
 import org.ilaria.progetto.Security.JwtUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -23,23 +22,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class UtenteService {
+public class UserService {
 
-    private final UtenteRepository utenteRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UtenteMapper utenteMapper;
+    private final UserMapper userMapper;
     private final AuthenticationManager authenitcationManager;
     private final JwtUtils jwtUtils;
 
-    public void registra(UtenteDTO dto) {
-        if (utenteRepository.existsByEmail(dto.getEmail())) { throw new RuntimeException("Email già registrata!"); }
-        Utente utente = utenteMapper.toEntity(dto);
-        utente.setPassword(passwordEncoder.encode(dto.getPassword()));
-        utente.setRuolo(dto.getCodiceDocente() != null ? Ruolo.DOCENTE : Ruolo.STUDENTE);
-        utenteRepository.save(utente);
+    public void register(UserDTO dto) {
+        if (userRepository.existsByEmail(dto.getEmail())) { throw new RuntimeException("Email already registered"); }
+        User user = userMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(dto.getTeacherCode() != null ? Role.TEACHER : Role.STUDENT);
+        userRepository.save(user);
     }
 
-    public ResponseEntity<?> login(UtenteDTO dto) {
+    public ResponseEntity<?> login(UserDTO dto) {
         Authentication authentication = authenitcationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getEmail(),dto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -49,21 +48,21 @@ public class UtenteService {
         String ruolo = userDetails.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
-                .orElse("NESSUN_RUOLO");
+                .orElse("NO_ROLE");
         return ResponseEntity.ok(new JwtResponse(jwt,userDetails.getUsername(), ruolo));
     }
 
-    @Cacheable(value = "Utente", key = "#email")
-    public Utente findUtente(String email) {
-        return utenteRepository.findByEmail(email).orElseThrow();
+    @Cacheable(value = "User", key = "#email")
+    public User findUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow();
     }
 
-    @Cacheable(value = "UtenteID", key = "#iDutente")
-    public Utente getUtente(long iDutente) { return utenteRepository.findById(iDutente); }
+    @Cacheable(value = "UserID", key = "#userID")
+    public User getUser(long userID) { return userRepository.findById(userID); }
 
     @Transactional
-    public void update(Long id, String nuovaEmail, String nuovaPassword) {
-        utenteRepository.updateDati(id,nuovaEmail,nuovaPassword);
+    public void update(Long id, String newEmail, String newPassword) {
+        userRepository.updateDates(id,newEmail,newPassword);
     }
 
 }

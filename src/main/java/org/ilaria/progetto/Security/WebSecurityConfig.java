@@ -37,7 +37,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/AuleLibere/home/auth/**").permitAll()
+                        .requestMatchers("/FreeClassroom/home/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationSwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

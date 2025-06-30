@@ -1,138 +1,129 @@
 package org.ilaria.progetto;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.ilaria.progetto.Model.Entity.Aula;
-import org.ilaria.progetto.Model.Entity.Contenuto;
-import org.ilaria.progetto.Model.Entity.Utente;
-import org.ilaria.progetto.Repository.AulaRepository;
-import org.ilaria.progetto.Repository.ContenutoRepository;
-import org.ilaria.progetto.Repository.UtenteRepository;
+import org.ilaria.progetto.Model.Entity.Classroom;
+import org.ilaria.progetto.Model.Entity.Codes;
+import org.ilaria.progetto.Model.Entity.Content;
+import org.ilaria.progetto.Model.Entity.User;
+import org.ilaria.progetto.Repository.ClassroomRepository;
+import org.ilaria.progetto.Repository.CodeRepository;
+import org.ilaria.progetto.Repository.ContentRepository;
+import org.ilaria.progetto.Repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import java.util.List;
+
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class Initializer {
 
-    private final AulaRepository aulaRepository;
-    private final ContenutoRepository contenutoRepository;
-    private final UtenteRepository utenteRepository;
+    private final ClassroomRepository classroomRepository;
+    private final ContentRepository contentRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CodeRepository codeRepository;
 
     @PostConstruct
     public void initData() {
-        if(utenteRepository.count()==0) {
+        if (userRepository.count() == 0) {
             String password = passwordEncoder.encode("password123");
-            Utente admin = new Utente(null,"admin","admin@gmail.com",  password ,null,-1,null);
-            admin.setRuolo(Ruolo.ADMIN);
-            utenteRepository.save(admin);
-            if (aulaRepository.count() == 0) {
+            User admin = new User(null, "admin", "admin@gmail.com", password, null, -1, null, new LinkedList<>());
+            admin.setRole(Role.ADMIN);
+            userRepository.save(admin);
+            if (classroomRepository.count() == 0) {
                 loadAule(admin);
             }
-            if (contenutoRepository.count() == 0) {
+            if (contentRepository.count() == 0) {
                 loadContenuti();
             }
         }
+        if(codeRepository.count() == 0) {
+            loadCodici();
+        }
     }
 
-    private void loadAule(Utente admin) {
-        List<Aula> aule = List.of(
-                new Aula(null, "0A", 1, 1, false, 0, null),
-                new Aula(null, "1B", 80, 2, true, 0, admin),
-                new Aula(null, "30A", 1, 1, true, 0, admin),
-                new Aula(null, "42B2", 100, 0, false, 0, null),
-                new Aula(null, "2C", 100, 6, false, 0, null),
-                new Aula(null, "3D", 80, 7, true, 0, admin),
-                new Aula(null, "11B", 80, 4, true, 0, admin),
-                new Aula(null, "12C", 100, 3, false, 0, null),
-                new Aula(null, "20A", 150, 1, false, 0, null),
-                new Aula(null, "21B", 100, 0, false, 0, null),
-                new Aula(null, "22C", 80, 3, true, 0, admin),
-                new Aula(null, "23D", 100, 4, false, 0, null),
-                new Aula(null, "31B2", 100, 2, false, 0, null),
-                new Aula(null, "33D", 130, 6, false, 0, null),
-                new Aula(null, "40Z", 150, 5, false, 0, null),
-                new Aula(null, "41B0A", 120, 7, false, 0, null),
-                new Aula(null, "43C", 150, 1, false, 0, null),
-                new Aula(null, "10A", 100, 5, false, 0, null),
-                new Aula(null, "13D", 130, 2, false, 0, null),
-                new Aula(null, "32C", 50, 0, true, 0, admin)
+    private void loadCodici() {
+        List<Codes> codici = List.of(
+                new Codes(null,"123"),
+                new Codes(null,"234"),
+                new Codes(null,"345"),
+                new Codes(null,"456"),
+                new Codes(null,"567"),
+                new Codes(null,"678"),
+                new Codes(null,"789"),
+                new Codes(null,"890"),
+                new Codes(null,"901"),
+                new Codes(null,"012")
         );
-        aulaRepository.saveAll(aule);
+
+        codeRepository.saveAll(codici);
+    }
+
+    private void loadAule(User admin) {
+        List<Classroom> aule = List.of(
+                new Classroom(null, "0A", 1, 1, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "1B", 80, 2, true, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "30A", 1, 1, true, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "42B2", 100, 0, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "2C", 100, 6, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "3D", 80, 7, true, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "11B", 80, 4, true, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "12C", 100, 3, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "20A", 150, 1, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "21B", 100, 0, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "22C", 80, 3, true, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "23D", 100, 4, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "31B2", 100, 2, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "33D", 130, 6, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "40Z", 150, 5, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "41B0A", 120, 7, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "43C", 150, 1, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "10A", 100, 5, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "13D", 130, 2, false, 0, admin, new LinkedList<>(), new LinkedList<>()),
+                new Classroom(null, "32C", 50, 0, true, 0, admin, new LinkedList<>(), new LinkedList<>())
+        );
+
+        classroomRepository.saveAll(aule);
     }
 
     private void loadContenuti() {
-        List<Contenuto> contenuti = List.of(
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("0A").orElse(null)),
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("0A").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("0A").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("2C").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("2C").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("12C").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("12C").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("13D").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("13D").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("13D").orElse(null)),
-
-                new Contenuto(null, "pc", aulaRepository.findByCubo("1B").orElse(null)),
-                new Contenuto(null, "proettore", aulaRepository.findByCubo("1B").orElse(null)),
-
-                new Contenuto(null, "pc", aulaRepository.findByCubo("3D").orElse(null)),
-                new Contenuto(null, "proettore", aulaRepository.findByCubo("3D").orElse(null)),
-
-                new Contenuto(null, "pc", aulaRepository.findByCubo("11B").orElse(null)),
-                new Contenuto(null, "proettore", aulaRepository.findByCubo("11B").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("10A").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("10A").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("20A").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("20A").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("20A").orElse(null)),
-
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("21B").orElse(null)),
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("21B").orElse(null)),
-
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("22C").orElse(null)),
-                new Contenuto(null, "proettore", aulaRepository.findByCubo("22C").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("23D").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("23D").orElse(null)),
-
-                new Contenuto(null, "pc", aulaRepository.findByCubo("30A").orElse(null)),
-                new Contenuto(null, "proettore", aulaRepository.findByCubo("30A").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("31B2").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("31B2").orElse(null)),
-
-                new Contenuto(null, "pc", aulaRepository.findByCubo("32C").orElse(null)),
-                new Contenuto(null, "proettore", aulaRepository.findByCubo("32C").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("33D").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("33D").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("40Z").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("40Z").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("40Z").orElse(null)),
-
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("41B0A").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("41B0A").orElse(null)),
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("41B0A").orElse(null)),
-
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("42B2").orElse(null)),
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("42B2").orElse(null)),
-
-                new Contenuto(null, "microfono", aulaRepository.findByCubo("43C").orElse(null)),
-                new Contenuto(null, "proiettore", aulaRepository.findByCubo("43C").orElse(null)),
-                new Contenuto(null, "prese", aulaRepository.findByCubo("43C").orElse(null))
+        Map<String, List<String>> contenutiPerAula = Map.ofEntries(
+                Map.entry("0A", List.of("microfono", "proiettore", "prese")),
+                Map.entry("1B", List.of("pc", "proiettore")),
+                Map.entry("2C", List.of("proiettore", "microfono")),
+                Map.entry("3D", List.of("pc", "proiettore")),
+                Map.entry("11B", List.of("pc", "proiettore")),
+                Map.entry("12C", List.of("proiettore", "microfono")),
+                Map.entry("13D", List.of("proiettore", "microfono", "prese")),
+                Map.entry("10A", List.of("proiettore", "prese")),
+                Map.entry("20A", List.of("proiettore", "prese", "microfono")),
+                Map.entry("21B", List.of("microfono", "proiettore")),
+                Map.entry("22C", List.of("microfono", "proiettore")),
+                Map.entry("23D", List.of("proiettore", "microfono")),
+                Map.entry("30A", List.of("pc", "proiettore")),
+                Map.entry("31B2", List.of("proiettore", "prese")),
+                Map.entry("32C", List.of("pc", "proiettore")),
+                Map.entry("33D", List.of("proiettore", "microfono")),
+                Map.entry("40Z", List.of("proiettore", "microfono", "prese")),
+                Map.entry("41B0A", List.of("proiettore", "prese", "microfono")),
+                Map.entry("42B2", List.of("microfono", "proiettore")),
+                Map.entry("43C", List.of("microfono", "proiettore", "prese"))
         );
-        contenutoRepository.saveAll(contenuti);
-    }
 
+        List<Content> contenuti = new ArrayList<>();
+
+        for (Map.Entry<String, List<String>> entry : contenutiPerAula.entrySet()) {
+            String cubo = entry.getKey();
+            List<String> items = entry.getValue();
+            classroomRepository.findByCube(cubo).ifPresent(aula -> {
+                for (String item : items) {
+                    contenuti.add(new Content(null, item, aula));
+                }
+            });
+        }
+
+        contentRepository.saveAll(contenuti);
+    }
 }

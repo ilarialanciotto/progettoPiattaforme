@@ -1,8 +1,8 @@
 package org.ilaria.progetto.Security;
 
 import lombok.AllArgsConstructor;
-import org.ilaria.progetto.Model.Entity.Utente;
-import org.ilaria.progetto.Repository.UtenteRepository;
+import org.ilaria.progetto.Model.Entity.User;
+import org.ilaria.progetto.Repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,20 +15,20 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UtenteRepository utenteRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Utente utente = utenteRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con l'email: " + username));
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found by email: " + username));
 
         List<GrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority("ROLE_" + utente.getRuolo().name())
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
         );
 
         return new org.springframework.security.core.userdetails.User(
-                utente.getEmail(),
-                utente.getPassword(),
+                user.getEmail(),
+                user.getPassword(),
                 authorities
         );
     }

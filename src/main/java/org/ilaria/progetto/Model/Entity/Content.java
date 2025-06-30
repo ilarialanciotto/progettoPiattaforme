@@ -9,21 +9,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "aule")
-public class Aula {
+@Table(name = "contents")
+public class Content {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cubo;
-    private int numeroPosti,piano;
-    private boolean laboratorio;
 
-    @Version
-    private int version;
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "utente_id")
-    private Utente responsabile;
-
+    @JoinColumn(name = "classroom_id")
+    private Classroom classroom;
 }
