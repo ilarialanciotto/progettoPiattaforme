@@ -42,7 +42,9 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO user) { return userService.login(user); }
+    public ResponseEntity<?> login(@RequestBody UserDTO user) {
+        return userService.login(user);
+    }
 
     /* ad ogni richiesta di getLista se esistono prenotazioni viene controllato che non ci siano
         prenotazioni scadute e dopo di che mostra le aule libere */
@@ -93,6 +95,7 @@ public class UserController {
     @PostMapping("/booking")
     public ResponseEntity<String> booking(@RequestBody BookingDTO booking) {
         try{
+            System.out.println("oggetto " + booking);
             if(!bookingService.isBookable(booking))
                 return ResponseEntity.badRequest().body("Classroom not available");
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();

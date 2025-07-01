@@ -15,6 +15,7 @@ public interface BookingMapper {
     @Mapping(target = "classroom", ignore = true)
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Booking toEntity(BookingDTO bookingDTO);
 
 }

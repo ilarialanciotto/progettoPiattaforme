@@ -58,7 +58,7 @@ public class Admin_TeacherController {
         return ResponseEntity.ok("Responsibility assigned successfully");
     }
 
-    @PreAuthorize("hasRole('DOCENTE')")
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/Teacher/getLaboratory")
     public ResponseEntity<List<ClassroomDTO>> classroomList() {
         return ResponseEntity.ok(classroomService.getAdminClassrooms());

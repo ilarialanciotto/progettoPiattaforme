@@ -39,6 +39,7 @@ public class StudentController {
     @PostMapping("/Enter")
     public ResponseEntity<String> reportEntry(@RequestBody ClassroomCodeDTO classroomCodeDTO) {
         try{
+            System.out.println("oggetto " + classroomCodeDTO);
             long classroomID= classroomCodeDTO.getClassroomID();
             int code= classroomCodeDTO.getCode();
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();

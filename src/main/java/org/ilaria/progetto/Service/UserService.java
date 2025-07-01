@@ -2,6 +2,7 @@ package org.ilaria.progetto.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.ilaria.progetto.Model.Entity.User;
+import org.ilaria.progetto.Repository.CodeRepository;
 import org.ilaria.progetto.Role;
 import org.ilaria.progetto.Security.JwtResponse;
 import org.ilaria.progetto.Model.DTO.UserDTO;
@@ -29,12 +30,15 @@ public class UserService {
     private final UserMapper userMapper;
     private final AuthenticationManager authenitcationManager;
     private final JwtUtils jwtUtils;
+    private final CodeRepository codeRepository;
 
     public void register(UserDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) { throw new RuntimeException("Email already registered"); }
         User user = userMapper.toEntity(dto);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(dto.getTeacherCode() != null ? Role.TEACHER : Role.STUDENT);
+        if(codeRepository.findByCode(dto.getTeacherCode())!=null) user.setRole(Role.TEACHER);
+        else if (dto.getTeacherCode().equals("0"))user.setRole(Role.STUDENT);
+        else throw new RuntimeException("teacher code does not exist");
         userRepository.save(user);
     }
 

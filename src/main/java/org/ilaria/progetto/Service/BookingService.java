@@ -78,8 +78,11 @@ public class BookingService {
         booking.setClassroom(classroomService.getClassroom(bookingDTO.getLaboratoryID()));
         if(booking.getBookingDate().minusDays(1).isBefore(LocalDateTime.now()))
             throw new RuntimeException("the classroom must be booked at least one day in advance");
+        System.out.println("tutto ok 2");
         cacheManager.getCache("userCodes").evict(booking.getUser().getId());
+        System.out.println("tutto ok 1" + booking);
         bookingRepository.save(booking);
+        System.out.println("tutto ok 3");
     }
 
     public Booking getBooking(long bookingID) { return bookingRepository.findById(bookingID); }

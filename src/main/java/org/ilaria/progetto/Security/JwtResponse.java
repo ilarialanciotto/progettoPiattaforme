@@ -9,6 +9,6 @@ public class JwtResponse {
 
     private String jwt;
     private String username;
-    private String ruolo;
+    private String role;
 
 }

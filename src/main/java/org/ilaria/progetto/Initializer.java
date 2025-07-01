@@ -3,7 +3,7 @@ package org.ilaria.progetto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.ilaria.progetto.Model.Entity.Classroom;
-import org.ilaria.progetto.Model.Entity.Codes;
+import org.ilaria.progetto.Model.Entity.Code;
 import org.ilaria.progetto.Model.Entity.Content;
 import org.ilaria.progetto.Model.Entity.User;
 import org.ilaria.progetto.Repository.ClassroomRepository;
@@ -45,17 +45,17 @@ public class Initializer {
     }
 
     private void loadCodici() {
-        List<Codes> codici = List.of(
-                new Codes(null,"123"),
-                new Codes(null,"234"),
-                new Codes(null,"345"),
-                new Codes(null,"456"),
-                new Codes(null,"567"),
-                new Codes(null,"678"),
-                new Codes(null,"789"),
-                new Codes(null,"890"),
-                new Codes(null,"901"),
-                new Codes(null,"012")
+        List<Code> codici = List.of(
+                new Code(null,"123"),
+                new Code(null,"234"),
+                new Code(null,"345"),
+                new Code(null,"456"),
+                new Code(null,"567"),
+                new Code(null,"678"),
+                new Code(null,"789"),
+                new Code(null,"890"),
+                new Code(null,"901"),
+                new Code(null,"012")
         );
 
         codeRepository.saveAll(codici);
